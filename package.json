@@ -1,0 +1,19 @@
+{
+  "name": "adt-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "crocks": "^0.11.1",
+    "ramda": "^0.26.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9"
+  }
+}

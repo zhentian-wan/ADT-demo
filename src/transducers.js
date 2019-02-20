@@ -105,7 +105,7 @@ console.log(res5); // [3,5]
 ////////////////////////////////////
 // Define our transducer!
 /**
- * transducer :: ((a -> b), (a -> b), m a, m a) -> m a
+ * transducer :: ((a -> b -> a), (a -> b -> a), [a], [a]) -> [a]
  * @param {*} xf: base reducer 
  * @param {*} reducer: the composion redcuer signature
  * @param {*} seed : init value

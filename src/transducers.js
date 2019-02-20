@@ -105,7 +105,7 @@ console.log(res5); // [3,5]
 ////////////////////////////////////
 // Define our transducer!
 /**
- * transducer :: ((a, b), (a, b), m a, m a) -> m a
+ * transducer :: ((a -> b), (a -> b), m a, m a) -> m a
  * @param {*} xf: base reducer 
  * @param {*} reducer: the composion redcuer signature
  * @param {*} seed : init value
@@ -115,4 +115,4 @@ const transducer = (xf, reducer, seed, collection) => {
     return collection.reduce(reducer(xf), seed);
 }
 const res6 = transducer(pushReducer, doulbeLessThanThree, [], data);
-console.log(res6);
+console.log(res6); // [3,5]

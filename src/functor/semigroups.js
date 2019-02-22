@@ -6,7 +6,11 @@ const Sum = x => ({
     concat: ({x: y}) => Sum(x + y),
     inspect: () => `Sum ${x}`
 })
-const res1 = Sum(11).concat(Sum(12)).concat(Sum(2));
+Sum.empty = () => Sum(0);
+
+// If we have a special element like the zero here under addition, we have what's called a monoid,
+// that is a semigroup with a special element in there that acts like a neutral identity.
+const res1 = Sum.empty().concat(Sum(11).concat(Sum(12)).concat(Sum(2)));
 console.log(res1); // {x: 25}
 
 // All :: All s => b -> s b
@@ -15,13 +19,14 @@ const All = x => ({
     concat: ({x: y}) => All(y && x),
     inspect: () => `All ${x}`
 });
+All.empty = () => All(true);
 // Any :: Any s => b -> s b
 const Any = x => ({
     x,
     concat: ({x: y}) => Any( y || x),
     inspect: () => `Any ${x}`
 })
-const res2 = All(false).concat(All(true));
+const res2 = All.empty().concat(All(false).concat(All(true)));
 console.log(res2) // All false
 
 // First :: First f => a -> f a

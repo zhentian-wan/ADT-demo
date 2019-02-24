@@ -77,3 +77,62 @@ const createAllMembers = [
  );
  const res = transform(band);
  console.log(JSON.stringify(res, null, 2));
+ /**
+  * {
+  "name": "k.m.f.d.m",
+  "members": {
+    "current": [
+      {
+        "name": "sascha konictzko",
+        "plays": [
+          "vocals",
+          "synth",
+          "guitar",
+          "bass"
+        ]
+      },
+      {
+        "name": "lucia cifarelli",
+        "plays": [
+          "vocals",
+          "synth"
+        ]
+      },
+      {
+        "name": "jules hodgson",
+        "plays": [
+          "guitar",
+          "bass",
+          "synth"
+        ]
+      },
+      {
+        "name": "steve while",
+        "plays": [
+          "guitar"
+        ]
+      }
+    ],
+    "past": [
+      {
+        "name": "Raymond Watts"
+      },
+      {
+        "name": "En Esch"
+      },
+      {
+        "name": "Gunter"
+      }
+    ],
+    "all": [
+      "sascha konictzko",
+      "lucia cifarelli",
+      "jules hodgson",
+      "steve while",
+      "raymond watts",
+      "en esch",
+      "gunter"
+    ]
+  }
+}
+  */

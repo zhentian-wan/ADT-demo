@@ -1,3 +1,5 @@
+const {curry} = require('ramda');
+
 const plusTwo = x => x + 2;
 const toUpper = s => s.toUpperCase();
 const append = x => y => `${y} ${x}`;
@@ -36,8 +38,8 @@ class Maybe {
     map (fn) {
         return this.isNothing ? this : Maybe.of(fn(this.$value));
     }
-    inspest () {
-        return this.isNothing ? 'Nothing' : `Just ${this.$value}`
+    inspect() {
+        return this.isNothing ? 'Nothing' : `Just(${this.$value})`;
     }
 }
 
@@ -48,3 +50,28 @@ console.log(Maybe.of('Malkovich Malkovich').map(match(/a/ig)))
 console.log(Maybe.of(null).map(match(/a/ig))); // null
 
 console.log(compose(map(toUpper), Maybe.of)('Test'))
+
+// safeHead :: Maybe m => xs -> m a
+const safeHead = xs => Maybe.of(xs[0]);
+// streetName :: object -> Maybe string
+const streetName = compose(map(prop('street')), safeHead, prop('addresses'));
+console.log(streetName({addresses: []}));
+console.log(streetName({ addresses: [{ street: 'Shady Ln.', number: 4201 }] }));
+// withdraw :: Number -> Account -> Maybe(Account)
+const withdraw = curry((amount, {balance}) =>
+    Maybe.of(balance >= amount ? {balance: balance - amount}: null));
+
+// updateLedger :: Account -> Account
+const updateLedger = account => account;
+
+// remainingBalance :: Account -> String
+const remainingBalance = ({ balance }) => `Your balance is $${balance}`;
+// finishTransaction :: Account -> String
+const finishTransaction = compose(remainingBalance, updateLedger);
+// getTwenty :: Account -> Maybe(String)
+const getTwenty = compose(
+    map(finishTransaction),
+    withdraw(20)
+)
+console.log(getTwenty({ balance: 200.00 }))
+console.log(getTwenty({ balance: 10.00 }))

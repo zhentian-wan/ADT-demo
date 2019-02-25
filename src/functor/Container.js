@@ -20,6 +20,9 @@ class Container {
 Container.prototype.map = function (f) {
     return Container.of(f(this.$value));
 }
+Container.prototype.chain = function (f) {
+    return f(this.$value);
+}
 
 console.log(Container.of(2).map(plusTwo)) // Container { '$value': 4 }
 console.log(Container.of('flamethrowers').map(toUpper)) // Container { '$value': 'FLAMETHROWERS' }
@@ -75,3 +78,8 @@ const getTwenty = compose(
 )
 console.log(getTwenty({ balance: 200.00 }))
 console.log(getTwenty({ balance: 10.00 }))
+
+console.log('*******')
+const add = a => b => a +b;
+const res = Container.of(2).chain(two =>  Container.of(3).map(add(two)));
+console.log(Container.of(add(2)));

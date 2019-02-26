@@ -25,7 +25,7 @@ const generateAccountMetrics = (
 const transform = (metrics, rates) => metrics
   .map(setPair)
   .map(pair => setMetric(pair, rates))
-  .filter(stat = !!state);
+  .filter(stat => !!stat);
 
 
 async function getAccountLast30Days (params) {

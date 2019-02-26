@@ -2,6 +2,8 @@ const data = [1,2,3];
 const inc = x => x + 1;
 const double = x => 2 * x;
 const lessThanThree = x => x < 3;
+const toUpper = s => s.toUpperCase();
+const isVowel = char => ['a', 'e', 'i', 'o', 'u'].includes(char.toLowerCase());
 const compose = (...fns) => (...args) => fns.reduce((acc, fn) => [fn.call(null, ...acc)], args)[0]  
 ////////////////////
 /**
@@ -111,8 +113,40 @@ console.log(res5); // [3,5]
  * @param {*} seed : init value
  * @param {*} collection : data
  */
-const transducer = (xf, reducer, seed, collection) => {
-    return collection.reduce(reducer(xf), seed);
+const _transducer = (xf, reducer, seed, collection) => {
+    return collection.reduce(xf(reducer), seed);
 }
-const res6 = transducer(pushReducer, doulbeLessThanThree, [], data);
+const res6 = _transducer(doulbeLessThanThree, pushReducer, [], data);
 console.log(res6); // [3,5]
+
+const transducer = (xf, reducer, seed, colllection) => {
+    let acc = seed;
+    const transformReducer = xf(reducer);
+    for (let curr of colllection) {
+        acc = transformReducer(acc, curr)
+    }
+
+    return acc;
+}
+
+const res7 = transducer(
+    compose(filter(isVowel), map(toUpper)),
+    (acc, curr) => acc + curr,
+    '',
+    'transducer'
+);
+console.log("7", res7); // AUE
+
+
+const numMap = new Map()
+numMap.set('a', 1);
+numMap.set('b', 2);
+numMap.set('c', 3);
+numMap.set('d', 4);
+const res8 = transducer(
+    doulbeLessThanThree,
+    pushReducer,
+    [],
+    numMap.values()
+);
+console.log("8", res8); // [3,5]

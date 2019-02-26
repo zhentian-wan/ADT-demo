@@ -1,4 +1,5 @@
 const R = require('ramda');
+const {Map, List} = require('immutable-ext');
 
 // Sum :: Sum s => a -> s a
 const Sum = x => ({
@@ -7,10 +8,7 @@ const Sum = x => ({
     inspect: () => `Sum ${x}`
 })
 Sum.empty = () => Sum(0);
-
-// If we have a special element like the zero here under addition, we have what's called a monoid,
-// that is a semigroup with a special element in there that acts like a neutral identity.
-const res1 = Sum.empty().concat(Sum(11).concat(Sum(12)).concat(Sum(2)));
+const res1 = Sum(11).concat(Sum(12)).concat(Sum(2));
 console.log(res1); // {x: 25}
 
 // All :: All s => b -> s b
@@ -19,14 +17,13 @@ const All = x => ({
     concat: ({x: y}) => All(y && x),
     inspect: () => `All ${x}`
 });
-All.empty = () => All(true);
 // Any :: Any s => b -> s b
 const Any = x => ({
     x,
     concat: ({x: y}) => Any( y || x),
     inspect: () => `Any ${x}`
 })
-const res2 = All.empty().concat(All(false).concat(All(true)));
+const res2 = All(false).concat(All(true));
 console.log(res2) // All false
 
 // First :: First f => a -> f a
@@ -44,7 +41,7 @@ const _acct1 = {name: 'Nico', isPaid: true, points: 10, friends: ['Franklin']};
 const _acct2 = {name: 'Nico', isPaid: false, points: 30, friends: ['Gatsby']};
 
 // Map :: Map m => a -> m a
-const Map = x => ({
+const _Map = x => ({
     x,
     concat: ({x: y}) => Object.keys(y).map(k => y[k].concat(x[k]))
 });
@@ -54,10 +51,31 @@ const transformations = R.evolve({
     points: Sum
 });
 const semi_transform = R.compose(
-    Map,
+    _Map,
     transformations
 );
 const acct1 = semi_transform(_acct1);
 const acct2 = semi_transform(_acct2);
 const res4 = acct1.concat(acct2);
-console.log(res4); // [ First Nico, All false, Sum 40, [ 'Gatsby', 'Franklin' ] ]
+console.log(res4); // [ First Nico, All false,y
+
+const res5 = [Sum(1), Sum(2), Sum(3)]
+    .reduce((acc, x) => acc.concat(x), Sum.empty());
+console.log("res5", res5);    
+
+const res6 = List.of(Sum(1), Sum(2), Sum(3))
+    .fold(Sum.empty());
+console.log("res6", res6);    
+
+const res7 = Map({brian: Sum(3), sara: Sum(8)})
+    .fold(Sum.empty());
+console.log("res7", res7);  
+
+const res8 = Map({brian: 3, sara: 8})
+    .map(Sum)
+    .fold(Sum.empty());
+console.log("res8", res8);  
+
+const res9 = Map({brian: 3, sara: 8})
+    .foldMap(Sum, Sum.empty());
+console.log("res9", res9);   

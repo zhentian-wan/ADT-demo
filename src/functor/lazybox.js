@@ -1,5 +1,8 @@
 const Task = require('data.task');
-const Async = require('crocks/Async') 
+const Async = require('crocks/Async'); 
+const {liftA3, liftN} = require('crocks'); 
+
+
 
 const LazyBox = g => ({
     map: f => LazyBox(() => f(g())),
@@ -87,6 +90,42 @@ const taskApp =  lunchMissiles()
 const asyncApp = lunchRocky()
     .map(x => x + "!")
 
-
+// apply :: (((*) -> b), [ a ]) -> b
+const apply = fn => xs =>
+  fn.apply(null, xs)
 taskApp.map(x => "   From Task").fork(e => console.error(e), a => console.log(a))
 asyncApp.map(x => "   From Async").fork(e => console.error(e), a => console.log(a))
+
+
+const add = x => y => z=> x + y + z;
+const addAsyncNumbers = liftA3(add);
+Async.of(add)
+    .ap(Async.of(5))
+    .ap(Async((_, res) => {
+        setTimeout(() => {
+            console.log('resolve 2');
+            res(2)
+        }, 500)}))
+    .ap(Async((_, res) => {
+        setTimeout(() => {
+            console.log('resolve 2');
+            res(2)
+        }, 500)}))
+    .fork(e => console.error(e), x => console.log('async222', x));
+
+
+const res = addAsyncNumbers(
+    Async.of(5),
+    Async((_, res) => {
+        setTimeout(() => {
+            console.log('resolve 2');
+            res(2)
+        }, 500)
+}), Async((_, res) => {
+    setTimeout(() => {
+        console.log('resolve 3');
+        res(3)
+    }, 600)
+}));
+res.fork(e => console.error(e), x => console.log('async', x))
+

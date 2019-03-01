@@ -12,6 +12,9 @@
   "dependencies": {
     "crocks": "^0.11.1",
     "data.task": "^3.1.2",
+    "futurize": "^1.2.0",
+    "immutable": "^4.0.0-rc.12",
+    "immutable-ext": "^1.1.5",
     "moment": "^2.24.0",
     "ramda": "^0.26.1"
   },

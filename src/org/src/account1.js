@@ -13,7 +13,9 @@ class Account {
     }
     return fetchAccount(newAccountId)
       .then(a => this._account = a)
-      .catch(err => new Error('Cannot fetch account'));
+      .catch(err => {
+        throw new Error('Cannot fetch account')
+      });
   }
 
   setAccountId (newAccountId) {

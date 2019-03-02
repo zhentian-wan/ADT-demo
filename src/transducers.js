@@ -4,7 +4,7 @@ const double = x => 2 * x;
 const lessThanThree = x => x < 3;
 const toUpper = s => s.toUpperCase();
 const isVowel = char => ['a', 'e', 'i', 'o', 'u'].includes(char.toLowerCase());
-const compose = (...fns) => (...args) => fns.reduce((acc, fn) => [fn.call(null, ...acc)], args)[0]  
+const compose = (...fns) => (...args) => fns.reduce((acc, fn) => [fn.call(null, ...acc)], args)[0]
 ////////////////////
 /**
  * Problem: We loop over array 3 times! We want to loop over only once
@@ -52,12 +52,12 @@ console.log(res3);    // [3,5]
 //Because reducer :: (acc, curr) => acc
 //For every reducer functions' signature are the same.
 //If the function sinature are the same, then we can compose function together!
-const _mapReducer = (xf, array) => 
+const _mapReducer = (xf, array) =>
     array.reduce((acc, curr) => {
         acc.push(xf(curr))
         return acc;
     }, []);
-const _filterReducer = (xf, array) => 
+const _filterReducer = (xf, array) =>
     array.reduce((acc, curr) => {
         if (xf(curr)) acc.push(curr);
         return acc;
@@ -83,7 +83,7 @@ const map = xf => reducer => ((acc, curr) => {
     return acc;
 });
 const filter = pred => reducer => ((acc, curr)=> {
-    if (pred(curr)) acc = reducer(acc, curr) 
+    if (pred(curr)) acc = reducer(acc, curr)
     return acc;
 })
 // For mapReducer and filterReducer, we both do acc.push()
@@ -92,7 +92,7 @@ const pushReducer = (acc, value) => {
     acc.push(value);
     return acc;
 };
- 
+
 /**
  * Now we are able to use functional style and loop the array only once!s
  */
@@ -108,7 +108,7 @@ console.log(res5); // [3,5]
 // Define our transducer!
 /**
  * transducer :: ((a -> b -> a), (a -> b -> a), [a], [a]) -> [a]
- * @param {*} xf: base reducer 
+ * @param {*} xf: base reducer
  * @param {*} reducer: the composion redcuer signature
  * @param {*} seed : init value
  * @param {*} collection : data
@@ -150,3 +150,26 @@ const res8 = transducer(
     numMap.values()
 );
 console.log("8", res8); // [3,5]
+
+/**
+ * into helper
+ * transducer = (xf, reducer, seed, colllection)
+ * Until so far, we have to know what kind of base reducer we need to use
+ * for example, push reduer for array, concat reducer for string...
+ *
+ * The idea of into helper is to let transducer to figure out what reducer
+ * we want to use automaticlly instead of we telling transducer which one to use
+ *
+ *  into:: (to, xf, collection)
+ */
+
+const objectReducer = (obj, value) => Object.assign(obj, value);
+const { isObject } = require('crocks');
+ const into = (to, xf, collection) => {
+     if (Array.isArray(to)) {
+        return transducer(xf, pushReducer, to, collection);
+     } else if (isObject(to)) {
+        return transducer(xf, objectReducer, to, collection)
+     }
+     throw new Error('into only supports arrays and objects as `to`');
+ }

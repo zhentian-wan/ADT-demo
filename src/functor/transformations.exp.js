@@ -79,7 +79,7 @@ const arrayToMaybe = x => Maybe.of(x[0]);
 // promiseToTask :: Promise a b -> Task a b
 const promiseToTask = x => new Task((rej, res) => x.then(res).catch(rej));
 // taskToPromise :: Task a b -> Promise a b
-const taskToPromise = x => new Promise((resolve, rejct) => x.fork(reject, resolve))
+const taskToPromise = x => new Promise((resolve, reject) => x.fork(reject, resolve))
 
 // Good
 const x = Promise.resolve('ring');

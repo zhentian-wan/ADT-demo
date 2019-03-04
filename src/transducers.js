@@ -1,3 +1,6 @@
+const { isObject, isArray } = require('crocks');
+const { toPairs } = require('ramda');
+
 const data = [1,2,3];
 const inc = x => x + 1;
 const double = x => 2 * x;
@@ -119,10 +122,13 @@ const _transducer = (xf, reducer, seed, collection) => {
 const res6 = _transducer(doulbeLessThanThree, pushReducer, [], data);
 console.log(res6); // [3,5]
 
-const transducer = (xf, reducer, seed, colllection) => {
+const transducer = (xf, reducer, seed, collection) => {
     let acc = seed;
+
+    collection = isObject(collection) ? toPairs(collection): collection
+
     const transformReducer = xf(reducer);
-    for (let curr of colllection) {
+    for (let curr of collection) {
         acc = transformReducer(acc, curr)
     }
 
@@ -164,8 +170,7 @@ console.log("8", res8); // [3,5]
  */
 
 const objectReducer = (obj, value) => Object.assign(obj, value);
-const { isObject } = require('crocks');
- const into = (to, xf, collection) => {
+const into = (to, xf, collection) => {
      if (Array.isArray(to)) {
         return transducer(xf, pushReducer, to, collection);
      } else if (isObject(to)) {
@@ -173,3 +178,23 @@ const { isObject } = require('crocks');
      }
      throw new Error('into only supports arrays and objects as `to`');
  }
+
+ /**
+  * seq helper
+  * Different from into help, seq helper will infer the collection type
+  */
+const seq = (xf, collection) => {
+    if (isArray(collection)) {
+       return transducer(xf, pushReducer, [], collection);
+    } else if (isObject(collection)) {
+       return transducer(xf, objectReducer, {}, collection)
+    }
+    throw new Error('seq : unsupport collection type');
+}
+console.log(seq(compose(
+    filter(x => x < 5),
+    map(x => x * 2)
+), [1,2,3]));
+
+const filp = map(([k, v]) => ({[v]: k}));
+console.log(seq(filp, {one: 1, two: 2})); /**{1: 'one, 2: 'two'} */

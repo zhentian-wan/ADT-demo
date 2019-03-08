@@ -11,7 +11,7 @@
  // names :: [a] -> [b]
  const names = argv.map(args => args.slice(2));
 
-const related = name =>
+ const related = name =>
     findArtist(name)
     .map(artist => artist.id)
     .chain(id => relatedArtists(id))

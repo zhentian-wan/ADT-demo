@@ -77,6 +77,40 @@ if (cluster.isMaster) {
         cluster.fork();
     }
 
+    // In case of crash, we want to strat a new worker
+    cluster.on('exit', (worker, code, signal) => {
+        if (code !== 0 && !worker.exitedAfterDisconnect) {
+            console.log(`Worker ${worker.id} crashed. Starting a new wroker`);
+            cluster.fork();
+        }
+    })
+
+    // kill -SIGUSR2 <MASTER_PID>
+    // In case to upgrade, we want to restart each worker one by one
+    process.on('SIGUSR2', () => {
+        const workers = Object.values(cluster.workers);
+        const restartWorker = (workerIndex) => {
+            const worker = cluster.workers[workerIndex];
+            if (!worker) return;
+
+            // On worker exit, we want to restart it, then continue
+            // with next worker
+            worker.on('exit', () => {
+                // If it is because crash, we don't continue
+                if (!worker.exitedAfterDisconnect) return;
+                console.log(`Exited process ${worker.process.pid}`);
+                cluster.fork().on('listening', () => {
+                    restartWorker(workerIndex + 1);
+                });
+
+                worker.disconnect();
+            });
+        }
+        // Calling restartWorker recursively
+        restartWorker(0);
+    });
+
+
     const updateWorkers = () => {
         const usersCount = numberOfUsersDB();
         Object.values(cluster.workers).forEach(worker => {

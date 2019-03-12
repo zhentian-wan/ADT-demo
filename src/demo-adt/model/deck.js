@@ -1,7 +1,10 @@
-const assign = require('crocks/helpers/assign');
-const liftA2 = require('crocks/helpers/liftA2');
+const Pair = require('crocks/Pair');
 
+const assign = require('crocks/helpers/assign');
+const chain = require('crocks/pointfree/chain');
+const liftA2 = require('crocks/helpers/liftA2');
 const map = require('crocks/pointfree/map');
+const reduce = require('crocks/pointfree/reduce')
 
 const suits = [
     { suit: '♠', color: 'dark' },
@@ -10,7 +13,7 @@ const suits = [
     { suit: '♦', color: 'light' },
   ]
 
-  const values = [
+const values = [
     { value: 1, face: 'A' },
     { value: 2, face: '2' },
     { value: 3, face: '3' },
@@ -33,8 +36,24 @@ const displayCard = ({face, suit}) =>
 // displayCards :: [Card] -> [String]
 const displayCards = map(displayCard);
 
+// pickCard : [ Card ] -> Pair [Card][Card]
+const pickCard = cs => {
+  const idx = Math.floor(Math.random() * cs.length);
+
+  return Pair(
+      [].concat(cs[idx]),
+      cs.slice(0, idx).concat(cs.slice(idx + 1))
+  )
+}
+// shuffleCards : [ Cards ] -> [ Cards ]
+const shuffleCards = cards => reduce(
+  chain(pickCard), Pair([], cards), cards
+).fst();
+
 module.exports = {
     deck,
     displayCard,
-    displayCards
+    displayCards,
+    pickCard,
+    shuffleCards
 }

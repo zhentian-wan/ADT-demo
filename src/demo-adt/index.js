@@ -23,7 +23,7 @@ const rando = x => {
 
 // pullRandom :: Integer -> State Object Float
 const pullRandom =
-    defSeed => get(s => console.log(s)||pluckSeed(defSeed)(s)).chain(rando);
+    defSeed => get(s => pluckSeed(defSeed)).chain(rando);
 
 // limitIndx :: Integer -> Float -> Integer
 const limitIndx = len => x => (x * len) | 0;

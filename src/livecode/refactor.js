@@ -1,20 +1,38 @@
-const {gt, lte, gte} = require('ramda');
+const {gt, lte} = require('ramda');
 
-const {and, safe, option, flip, curry, compose, map, constant} = require('crocks');
+const {First, mreduceMap, and, safe, option, flip, objOf, assoc,
+    merge, fanout, curry, compose, map, constant} = require('crocks');
 
-// taggedPred :: (b, (a - Boolean))
+
+const getSmlPred = and(flip(gt, -1), flip(lte, 50));
+const getMedPred = and(flip(gt, 50), flip(lte, 100));
+const getLrgred =  flip(gt, 100);
+// taggedPred :: (b, (a -> Boolean))
 // taggedPreds :: [taggedPred]
-const taggedPreds = [
-    ['Sml', flip(lte, 50)],
-    ['Med', and(flip(gt, 50), flip(lte, 100))],
-    ['Lrg', flip(gt, 100)]
-];
-
+/*const taggedPreds = [
+    ['Sml', getSmlPred],
+    ['Med', getMedPred],
+    ['Lrg', getLrgred]
+];*/
+const taggedPreds = require('./data.js');
 // tagValue :: taggedPred -> a -> Maybe b
-const tagValue = curry(([tag, pred]) =>
-    compose(map(constant(tag)), safe(pred)));
+const tagValue = curry(([tag, pred]) => compose(
+    map(constant(tag)),
+    safe(pred)
+));    
 
-console.log(
-    tagValue(taggedPreds[2], 100)
+// match :: [ taggedPreds ] -> a -> Maybe b
+const match = 
+    flip(x => mreduceMap(First, flip(tagValue, x)));  
+const matchNumber = match(taggedPreds);
+
+const tagCard = fanout(compose(option(' | '), matchNumber), objOf('number'));
+
+const cardFromNumber = compose(
+    merge(assoc('type')),
+    tagCard
 )
 
+console.log(
+    cardFromNumber('4026-xxxx-xxxxx-xxxx')
+) // { number: '4026-xxxx-xxxxx-xxxx', type: 'Visa Electron|visa' }

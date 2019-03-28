@@ -1,12 +1,27 @@
 const log = require('./lib/log');
-const State = require('crocks/State');
-const {pullRandom} = require('./model/randoArr.js');
+const bimap = require('crocks/pointfree/bimap');
+const {deck, displayCard, pickRandom} = require('./model/deck');
 
-// limitIndx :: Integer -> Float -> Integer
-const limitIndx = len => x => (x * len) | 0;
+const initState = {
+    seed: 23,
+    deck
+}
 
-const seed = 76;
+const look = bimap(
+    x => displayCard(x.option('')), 
+    xs => xs.length
+);
+
+const game = pickRandom()
+    .chain(pickRandom)
+    .chain(pickRandom)
+    .chain(pickRandom)
+    .chain(pickRandom)
+    .chain(pickRandom)
+    .chain(pickRandom)
+    .chain(pickRandom)
+    .execWith(initState);
+    
 log(
-    pullRandom()
-    .execWith({seed: 10})
+    look(game.deck)
 );

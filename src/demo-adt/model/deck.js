@@ -37,7 +37,7 @@ const values = [
 // limitTo :: Float -> Int -> Int
 const limitTo = rn => limit => (rn * limit) | 0; // the same as Math.floor(rn * limit)
 // isValid :: a -> Maybe a
-const isValid = safe(isDefined);  
+const isValid = safe(isDefined);
 
 // displayCard :: Card -> String
 const displayCard = ({face, suit}) =>
@@ -45,7 +45,7 @@ const displayCard = ({face, suit}) =>
 // displayCards :: [Card] -> [String]
 const displayCards = map(displayCard);
 
-// Deck :: Pair (Last Card) [Card]  
+// Deck :: Pair (Last Card) [Card]
 // deck :: Deck
 const deck = Pair(Last.empty(), liftA2(assign, suits, values));
 // emptyDeck :: () -> Deck
@@ -70,24 +70,24 @@ const pickCard = cs => {
 // drawCardAt : Int -> [Card] -> Deck
 const drawCardAt = indx => deck => {
   return Pair(
-      // Last can take Maybe or value in arguement, 
+      // Last can take Maybe or value in arguement,
       // make it possible to control the code safety
       Last(isValid(deck[indx])),
       deck.slice(0, indx).concat(deck.slice(indx + 1))
   )
 };
 // getLength : () -> State GameState Int
-const getLength = () => 
+const getLength = () =>
     getDeck()
         .map(deckLength);
 // drawCard : Int -> State GameState
-const drawCard = indx => 
-    getDeck() // getDeck () -> State(Pair(Deck)) -map-> Pair(Deck) -chain-> Deck -> drawCardAt(ind) -> Pair(Deck) 
+const drawCard = indx =>
+    getDeck() // getDeck () -> State(Pair(Deck)) -map-> Pair(Deck) -chain-> Deck -> drawCardAt(ind) -> Pair(Deck)
         .map(chain(drawCardAt(indx)))
         .chain(putDeck);
 // limit :: Float -> State GameState Int
-const limit = rn => getLength().map(limitTo(rn)); 
-// pickRandom :: () -> State GameState Int        
+const limit = rn => getLength().map(limitTo(rn));
+// pickRandom :: () -> State GameState Int
 const pickRandom = () => pullRandom().chain(limit).chain(drawCard);
 // shuffleCards : [ Cards ] -> [ Cards ]
 const shuffleCards = cards => reduce(

@@ -4,9 +4,9 @@ import '@babel/polyfill'
 import App from './App'
 import DefaultErrorBoundary from './DefaultErrorBoundary'
 import './styles.css'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
 
-import {Provider} from 'react-redux'
-import {createStore} from 'redux';
 import reducer from './data/reducers'
 
 if (process.env.NODE_ENV === 'development') {
@@ -16,13 +16,13 @@ if (process.env.NODE_ENV === 'development') {
 
 const data = {
   todos: [
-    {title: 'Hug Unicorn', completed: false},
-    {title: 'Mess with Texas', completed: false},
-    {title: 'Do Laundry', completed: true}
+    { title: 'Hug Unicorn', completed: false },
+    { title: 'Mess with Texas', completed: false },
+    { title: 'Do Laundry', completed: true }
   ]
 }
 
-const store = createStore(reducer, data);
+const store = createStore(reducer, data)
 
 ReactDOM.render(
   <React.StrictMode>

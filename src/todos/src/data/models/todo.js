@@ -5,7 +5,6 @@ import compose from 'crocks/helpers/compose'
 import map from 'crocks/pointfree/map'
 
 import { propArray, updateRecord, negate } from '../helper'
-
 const { get, modify } = State
 
 const commit = compose(
@@ -23,4 +22,5 @@ const mapTodos = mapFn =>
     )
   )
 
-export const toggle = ({ title }) => mapTodos(filpComplete(title)).chain(commit)
+export const toggle = ({ title }) =>
+    mapTodos(filpComplete(title)).chain(commit)

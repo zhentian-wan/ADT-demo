@@ -12,22 +12,18 @@ function Todo ({todo, onTodoClick}) {
     })
 
     return (
-        <li
-         className={classes}
-         onClick={() => onTodoClick(title)}
-         >
+        <li className={classes} onClick={() => onTodoClick(title)}>
             {title}
         </li>
     )
 }
-
 
 Todo.propTypes = {
     todo: PropTypes.shape({
         title: PropTypes.string,
         completed: PropTypes.bool
     }),
-    onTodoClick: PropTypes.func.isRequired
+    onTodoClick: PropTypes.func
 }
 
 export default Todo

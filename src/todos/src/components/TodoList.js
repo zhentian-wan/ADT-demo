@@ -16,7 +16,7 @@ const TodoList = ({todos, toggle}) =>
 
 TodoList.propTypes = {
   todos: PropTypes.array.isRequired,
-  toggle: PropTypes.func.isRequired
+  toggle: PropTypes.func
 }
 
 const mapStateToProps = ({todos}) => ({todos})

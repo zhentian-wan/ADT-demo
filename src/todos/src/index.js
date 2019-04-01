@@ -5,6 +5,10 @@ import App from './App'
 import DefaultErrorBoundary from './DefaultErrorBoundary'
 import './styles.css'
 
+import {Provider} from 'react-redux'
+import {createStore} from 'redux';
+import reducer from './data/reducers'
+
 if (process.env.NODE_ENV === 'development') {
   const axe = require('react-axe')
   axe(React, ReactDOM, 1000)
@@ -12,16 +16,20 @@ if (process.env.NODE_ENV === 'development') {
 
 const data = {
   todos: [
-    {title: 'Hug Unicorn'},
-    {title: 'Mess with Texas'},
-    {title: 'Do Laundry'}
+    {title: 'Hug Unicorn', completed: false},
+    {title: 'Mess with Texas', completed: false},
+    {title: 'Do Laundry', completed: true}
   ]
 }
+
+const store = createStore(reducer, data);
 
 ReactDOM.render(
   <React.StrictMode>
     <DefaultErrorBoundary>
-      <App data={data}/>
+      <Provider store={store}>
+        <App />
+      </Provider>
     </DefaultErrorBoundary>
   </React.StrictMode>,
   document.getElementById('app')

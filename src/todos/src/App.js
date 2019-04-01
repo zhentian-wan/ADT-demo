@@ -2,15 +2,13 @@ import React from 'react'
 import { hot } from 'react-hot-loader'
 import PropTypes from 'prop-types'
 
-const App = ({data}) =>
- (<main>
-    <ul className="todos">
-      {data.todos.map((todo, index) =>
-          <li className="todo" key={index}>
-            {todo.title}
-          </li>
-        )}
-    </ul>
+import TodoList from './components/TodoList'
+
+import './App.css'
+
+const App = () =>
+ (<main className="app">
+    <TodoList className="todoList"/>
   </main>)
 
 App.propTypes = {

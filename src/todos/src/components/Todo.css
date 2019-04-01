@@ -1,0 +1,9 @@
+.todo {
+    letter-spacing: 3px;
+    padding: 1rem;
+    list-style: none;
+}
+
+.todo--completed {
+    text-decoration: line-through;
+}

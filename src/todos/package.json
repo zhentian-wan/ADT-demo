@@ -61,9 +61,14 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
+    "classnames": "^2.2.6",
+    "crocks": "^0.11.1",
     "prop-types": "^15.6.2",
+    "ramda": "^0.26.1",
     "react": "^16.6.1",
     "react-dom": "^16.6.1",
-    "react-hot-loader": "^4.3.12"
+    "react-hot-loader": "^4.3.12",
+    "react-redux": "^6.0.1",
+    "redux": "^4.0.1"
   }
 }

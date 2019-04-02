@@ -22,5 +22,6 @@ const mapTodos = mapFn =>
     )
   )
 
+// toggle :: Object -> State AppState ()
 export const toggle = ({ title }) =>
     mapTodos(filpComplete(title)).chain(commit)

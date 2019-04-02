@@ -9,14 +9,18 @@ import safe from 'crocks/Maybe/safe'
 import isArray from 'crocks/predicates/isArray'
 import isSameType from 'crocks/predicates/isSameType'
 import mapProps from 'crocks/helpers/mapProps'
-import mconcatMap from 'crocks/helpers/mconcatMap'
+import mreduceMap from 'crocks/helpers/mreduceMap'
 import option from 'crocks/pointfree/option'
 import prop from 'crocks/Maybe/prop'
 import propOr from 'crocks/helpers/propOr'
 import when from 'crocks/logic/when'
 
+// Reducer :: Action -> Maybe (State AppState ())
+// Action :: {type: String, payload: a}
+
+// combineReducers :: [Reducer] -> Action -> Reducer
 export const combineReducers = reducers => action =>
-  mconcatMap(First, runReducer(action), reducers).option(State.of(action))
+  mreduceMap(First, applyTo(action), reducers)
 
 // negate :: a -> Boolean
 export const negate = x => !x
@@ -30,10 +34,7 @@ export const propArray = key =>
   )
 
 const runReducer = action =>
-  compose(
-    safe(isSameType(State)),
-    applyTo(action)
-  )
+  compose(applyTo(action))
 
 // sameTitle :: String -> Object -> Boolean
 const sameTitle = title =>
@@ -45,3 +46,13 @@ const sameTitle = title =>
 // updateRecord :: (String, Object) -> Object
 export const updateRecord = (title, update) =>
   when(sameTitle(title), mapProps(update))
+
+// createAction :: String -> a -> Action a
+export const createAction = type => payload =>
+    ({type, payload})
+
+// createReducer :: Object -> Action -> Reducer
+export const createReducer = strats => ({type, payload}) =>
+  prop(type, strats)
+    .map(applyTo(payload)) // Maybe (State AppState ())
+    .chain(safe(isSameType(State)));

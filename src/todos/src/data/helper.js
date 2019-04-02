@@ -33,9 +33,6 @@ export const propArray = key =>
     prop(key)
   )
 
-const runReducer = action =>
-  compose(applyTo(action))
-
 // sameTitle :: String -> Object -> Boolean
 const sameTitle = title =>
   compose(

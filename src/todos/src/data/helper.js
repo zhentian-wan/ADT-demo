@@ -5,6 +5,7 @@ import applyTo from 'crocks/combinators/applyTo'
 import chain from 'crocks/pointfree/chain'
 import compose from 'crocks/helpers/compose'
 import equals from 'crocks/pointfree/equals'
+import flip from 'crocks/combinators/flip'
 import safe from 'crocks/Maybe/safe'
 import isArray from 'crocks/predicates/isArray'
 import isSameType from 'crocks/predicates/isSameType'
@@ -21,6 +22,12 @@ import when from 'crocks/logic/when'
 // combineReducers :: [Reducer] -> Action -> Reducer
 export const combineReducers = reducers => action =>
   mreduceMap(First, applyTo(action), reducers)
+/*
+export const combineReducers = flip(action =>
+  mreduceMap(First, applyTo(action)))
+
+export const combineReducers =
+  flip(compose(mreduceMap(First), applyTo))*/
 
 // negate :: a -> Boolean
 export const negate = x => !x
@@ -46,7 +53,7 @@ export const updateRecord = (title, update) =>
 
 // createAction :: String -> a -> Action a
 export const createAction = type => payload =>
-    ({type, payload})
+  ({type, payload})
 
 // createReducer :: Object -> Action -> Reducer
 export const createReducer = strats => ({type, payload}) =>

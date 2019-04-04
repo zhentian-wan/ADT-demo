@@ -15,8 +15,10 @@ const { get, modify } = State
 // Todo :: {id: Number, title: String, completed: Boolean}
 // Todos :: [Todo]
 
-// create :: Object -> State AppState Todo
-const create = rec => liftA2(
+// Get id from State and combine with user input
+// createTodo :: Object -> State AppState Todo
+const createTodo = rec => liftA2(
+  // assoc :: Key -> Value -> Object -> Object
   assoc('id'),
   genId(),
   applyDefaults(rec)
@@ -61,7 +63,5 @@ export const add =
     composeK(
       commit,
       addTodo,
-      create
+      createTodo
     )
-    /*mapTodos(concat([defaultTodo(newTodo)]))
-    .chain(commit)*/

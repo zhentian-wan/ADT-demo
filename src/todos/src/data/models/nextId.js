@@ -9,7 +9,7 @@ const incNextId = id =>
     modify(assoc('nextId', id + 1))
     .map(constant(id))
 
-// gemId :: () -> State AppState Number
+// genId :: () -> State AppState Number
 export const genId = () =>
     get(propOr(0, 'nextId'))
     .chain(incNextId)

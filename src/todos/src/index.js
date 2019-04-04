@@ -1,28 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import '@babel/polyfill'
+import { Provider } from 'react-redux'
 import App from './App'
 import DefaultErrorBoundary from './DefaultErrorBoundary'
+import store from './data/store'
 import './styles.css'
-import { createStore } from 'redux'
-import { Provider } from 'react-redux'
-
-import reducer from './data/reducers'
 
 if (process.env.NODE_ENV === 'development') {
   const axe = require('react-axe')
   axe(React, ReactDOM, 1000)
 }
-
-const data = {
-  todos: [
-    { title: 'Hug Unicorn', completed: false },
-    { title: 'Mess with Texas', completed: false },
-    { title: 'Do Laundry', completed: true }
-  ]
-}
-
-const store = createStore(reducer, data)
 
 ReactDOM.render(
   <React.StrictMode>

@@ -20,6 +20,7 @@ function Todo ({todo, onTodoClick}) {
 
 Todo.propTypes = {
     todo: PropTypes.shape({
+        id: PropTypes.number,
         title: PropTypes.string,
         completed: PropTypes.bool
     }),

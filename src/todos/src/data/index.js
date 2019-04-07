@@ -16,6 +16,9 @@ const propSatisfies = (key, pred) => compose(
 )
 
 // where :: Object -> Object -> Boolean
+// toPairs will turns {id: xxx, name: xxx} into
+// Pair(id, xxx), Pair(name, xxx)
+// Then inside merge will pass 'id' as key and 'xxx' as pred to propSatisfies
 const where = compose(
     mconcatMap(Pred, merge(propSatisfies)),
     toPairs

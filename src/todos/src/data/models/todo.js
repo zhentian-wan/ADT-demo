@@ -7,6 +7,7 @@ import composeK from 'crocks/helpers/composeK'
 import defaultProps from 'crocks/helpers/defaultProps'
 import liftA2 from 'crocks/helpers/liftA2'
 import map from 'crocks/pointfree/map'
+import mapProps from 'crocks/helpers/mapProps'
 
 import { propArray, updateRecord, negate } from '../helper'
 import { genId } from './nextId';
@@ -39,7 +40,12 @@ const applyDefaults = rec =>
   State.of(rec)
     .map(defaultTodo)
 
-const filpComplete = title => map(updateRecord(title, { completed: negate }))
+// filpComplete :: Number -> Todo -> Todo
+const filpComplete = id =>
+  updateRecord(
+    {id},
+    mapProps({ completed: negate })
+  )
 
 // mapTodos :: (Todos -> a) -> State AppState a
 const mapTodos = mapFn =>
@@ -54,8 +60,8 @@ const addTodo = newTodo =>
   mapTodos(concat([newTodo]))
 
 // toggle :: Object -> State AppState ()
-export const toggle = ({ title }) =>
-    mapTodos(filpComplete(title))
+export const toggle = ({ id }) =>
+    mapTodos(map(filpComplete(id)))
     .chain(commit)
 
 // add :: Object -> State AppState ()

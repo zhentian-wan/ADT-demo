@@ -6,13 +6,13 @@ import './Todo.css'
 
 function Todo ({todo, onTodoClick}) {
 
-    const {title, completed} = todo;
+    const {id, title, completed} = todo;
     const classes = classnames('todo', {
         'todo--completed': completed
     })
 
     return (
-        <li className={classes} onClick={() => onTodoClick(title)}>
+        <li className={classes} onClick={() => onTodoClick(id)}>
             {title}
         </li>
     )

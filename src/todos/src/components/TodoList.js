@@ -21,7 +21,7 @@ TodoList.propTypes = {
 
 const mapStateToProps = ({todos}) => ({todos})
 const mapDispatchToProps = (dispatch) => ({
-  toggle: title => dispatch(toggleTodo({title}))
+  toggle: id => dispatch(toggleTodo({id}))
 })
 export default connect(
   mapStateToProps,

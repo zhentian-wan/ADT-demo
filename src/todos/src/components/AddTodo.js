@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 
 import {addTodo} from '../data/reducers/todo'
+import Button from './controls/Button'
 
 class AddTodo extends React.Component {
 
@@ -33,11 +34,12 @@ class AddTodo extends React.Component {
         return (
             <form className="addTodo" onSubmit={this.onSubmit}>
             <input
+                type="text"
                 className="addTodo__input"
                 ref={el => {this.input = el}} />
-                <button
+                <Button
                   className="addTodo__btn"
-                  type="submit">Add Todo</button>
+                  type="submit">Add Todo</Button>
             </form>
         )
     }

@@ -5,6 +5,7 @@ import identity from 'crocks/combinators/identity'
 
 const data = {
     nextId: 4,
+    todoFilter: 'SHOW_ALL',
     todos: [
       { id: 1, title: 'Hug Unicorn', completed: false },
       { id: 2, title: 'Mess with Texas', completed: false },

@@ -11,6 +11,7 @@ import {filters} from '../data/reducers/filterTodos'
 
 const {SHOW_ALL, SHOW_ACTIVE, SHOW_COMPLETED} = filters;
 
+// filterList :: Pair String String
 const filterList = [
     Pair(SHOW_ALL, 'All'),
     Pair(SHOW_COMPLETED, 'Completed'),

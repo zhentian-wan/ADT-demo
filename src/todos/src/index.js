@@ -11,7 +11,9 @@ if (process.env.NODE_ENV === 'development') {
   const axe = require('react-axe')
   axe(React, ReactDOM, 1000)
 }
-
+/**
+ * React.StrictMode : ONLY give warning in DEV mode
+ */
 ReactDOM.render(
   <React.StrictMode>
     <DefaultErrorBoundary>

@@ -1,10 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import Pair from 'crocks/Pair'
 import FilterSection from './controls/FilterSection'
 import {filters, updateFilter} from '../data/reducers/filterTodos'
-
+import {Pair} from '../js/helper'
 const {SHOW_ALL, SHOW_ACTIVE, SHOW_COMPLETED} = filters;
 
 // statusFilters :: Pair String String
@@ -18,6 +17,7 @@ const Filters = () => (
     <div className="filters">
         <FilterSection
             applyFilter={updateFilter}
+            filterState="todoFilter"
             filters={statusFilters}/>
     </div>
 )

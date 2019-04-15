@@ -6,6 +6,7 @@ export default class DefaultErrorBoundary extends React.Component {
     isError: false
   }
 
+  // If there is any error happen, will call this function
   static getDerivedStateFromError() {
     return { isError: true }
   }

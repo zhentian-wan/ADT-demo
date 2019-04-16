@@ -16,5 +16,5 @@ const pairOf = (left, right) =>
         .valueOf()
 
 export const stringPair = customValidation(
-    pairOf(String, Number)
+    pairOf(String, String)
 )

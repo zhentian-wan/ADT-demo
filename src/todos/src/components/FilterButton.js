@@ -1,8 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import Button from './controls/Button'
 import classnames from 'classnames'
 import { faFilter } from '@fortawesome/free-solid-svg-icons'
+
+import { compose, curry, option, propPath } from '../js/helper'
 
 const FilterButton = ({ active, onClick }) => {
     const classes = classnames('filterButton', {
@@ -22,4 +25,15 @@ FilterButton.propTypes = {
     onClick: PropTypes.func
 }
 
-export default FilterButton
+const activeGroup = curry(group =>
+    compose(
+        option(false),
+        propPath(['ui', 'filterGroups', group])
+    )
+)
+
+const mapStateToProps = (state, ownProps) => ({
+    active: activeGroup(ownProps.group, state)
+})
+
+export default connect(mapStateToProps)(FilterButton)

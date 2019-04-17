@@ -5,7 +5,15 @@ import Button from './controls/Button'
 import classnames from 'classnames'
 import { faFilter } from '@fortawesome/free-solid-svg-icons'
 
-import { compose, curry, option, propPath } from '../js/helper'
+import {
+    chain,
+    compose,
+    curry,
+    isBoolean,
+    option,
+    propPath,
+    safe
+} from '../js/helper'
 
 const FilterButton = ({ active, onClick }) => {
     const classes = classnames('filterButton', {
@@ -25,9 +33,11 @@ FilterButton.propTypes = {
     onClick: PropTypes.func
 }
 
+// activeGroup :: String -> AppState -> Boolean
 const activeGroup = curry(group =>
     compose(
-        option(false),
+        option(FilterButton.defaultProps.active),
+        chain(safe(isBoolean)),
         propPath(['ui', 'filterGroups', group])
     )
 )

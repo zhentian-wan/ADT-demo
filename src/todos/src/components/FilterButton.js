@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { toggleFilters } from '../data/reducers/ui'
 import Button from './controls/Button'
 import classnames from 'classnames'
 import { faFilter } from '@fortawesome/free-solid-svg-icons'
@@ -46,4 +47,11 @@ const mapStateToProps = (state, ownProps) => ({
     active: activeGroup(ownProps.group, state)
 })
 
-export default connect(mapStateToProps)(FilterButton)
+const mapDispatchToProps = (dispatch, { group }) => ({
+    onClick: () => dispatch(toggleFilters({ group }))
+})
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(FilterButton)

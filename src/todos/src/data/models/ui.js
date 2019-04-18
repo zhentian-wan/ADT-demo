@@ -1,5 +1,13 @@
-import {State} from '../../js/helper'
-
+import { State, compose, lensPath, lensProp, over, not } from '../../js/helper'
+const { modify } = State
 // ui -> filterGroups -> status
 
-export const toggleFilterGroup = ({group}) => ()
+const lnsFilterGroups = lensPath(['ui', 'filterGroups'])
+export const toggleFilterGroup = ({ group }) => {
+    const lns = compose(
+        lnsFilterGroups,
+        lensProp(group)
+    )
+
+    return modify(over(lns, not))
+}

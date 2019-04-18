@@ -1,3 +1,10 @@
+// ramda imports
+import lensPath from 'ramda/src/lensPath'
+import lensProp from 'ramda/src/lensProp'
+import over from 'ramda/src/over'
+import not from 'ramda/src/not'
+
+// Crocks imports
 import Pair from 'crocks/Pair'
 import Pred from 'crocks/Pred'
 import State from 'crocks/State'
@@ -19,6 +26,10 @@ import safe from 'crocks/Maybe/safe'
 import safeAfter from 'crocks/Maybe/safeAfter'
 import snd from 'crocks/Pair/snd'
 
+// ramda exports
+export { lensPath, lensProp, over, not }
+
+// Crocks exports
 export {
     Pair,
     Pred,

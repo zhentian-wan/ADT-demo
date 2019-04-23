@@ -1,6 +1,6 @@
 const log = require("./log");
 const R = require("ramda");
-const { curry, fanout, merge, reduce, compose } = require("crocks");
+const { curry, fanout, merge, reduce, compose, converge, divide, length } = require("crocks");
 
 const sum = reduce(R.add, 0);
 // divideByLen :: [Number] -> Number -> Number
@@ -35,7 +35,8 @@ const avg = compose(
   merge(R.divide),
   fanout(R.sum, R.length)
 );
+const avg2 = converge(R.divide, R.sum, R.length)
 
 const numbers = [54, 12, 78, 4, 2];
 
-log(avg(numbers));
+log(avg2(numbers));

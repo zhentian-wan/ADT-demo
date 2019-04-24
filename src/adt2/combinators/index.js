@@ -1,5 +1,5 @@
-const {constant, curry, compose, when, isNil, objOf} = require('crocks')
-const {add, multiply} = require('ramda')
+const {assoc, constant, curry, compose, when, isNil, objOf} = require('crocks')
+const {add, concat, multiply, length, toUpper} = require('ramda')
 const log = require('./log')
 // K (constant) :: a -> b -> a
 const K = curry(
@@ -80,7 +80,50 @@ const result =
         objOf('result'),
         doMath2
     )
-
 log(result(10)); // { result: 60 }
+
+// C (flip) :: (a -> b -> c) -> (b -> a -> c)
+const C = S(B(B, S), K(K))
+/*
+const C = curry(
+    (f, x, y) => curry(f)(y, x)
+)*/
+const pointfreeConcat =
+    C(concat)
+const concatHot =
+    pointfreeConcat('hot')
+log(concatHot('super')) // superhot
+log(concat('super', 'hot')) // superhot
+
+// calc :: {a: Number, b: Number} -> Number
+const calc =
+    ({a, b}) => add(a, b)
+
+//  makeResult :: (Object -> a) -> Object -> Object
+const makeResult =
+    S(C(assoc('result')))
+
+const calcResult =
+    makeResult(calc) /* {
+                            a: 10,
+                            b: 20,
+                            result: 30
+                        }*/
+
+log(calcResult({a: 10, b: 20}))
+
+// T (applyTo) :: a -> ((a -> b) -> b)
+/*const T = curry(
+    a => fn => fn(a)
+)*/
+const T = C(I);
+
+const fns = [
+    length, toUpper
+]
+log(fns.map(T('superhot'))) // [ 8, 'SUPERHOT' ]
+
+
+
 
 

@@ -122,8 +122,3 @@ const fns = [
     length, toUpper
 ]
 log(fns.map(T('superhot'))) // [ 8, 'SUPERHOT' ]
-
-
-
-
-

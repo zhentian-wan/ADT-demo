@@ -1,6 +1,6 @@
 const log = require('./log')
-const {and, flip, hasProp, not, ifElse, isArray, isObject, or, propEq} = require('crocks');
-const {add, lt} = require('ramda');
+const {and, assoc, constant, compose, unless, flip, map,  objOf, when, hasProp, dissoc,identity, not, ifElse, isArray, isObject, or, propEq} = require('crocks');
+const {add, lt, propOr} = require('ramda');
 
 // _isLess :: Number -> Boolean
 const _isLess = x => x < 10
@@ -59,6 +59,46 @@ const declarative = ifElse(
     add(-10) // go negitive
 )
 
+/**
+ * When
+ */
+
+ const _branch = (x) => {
+     const result = (x && x.isPublic) ?
+        dissoc('private', x) : x;
+
+     console.log(result);
+     return assoc('result', 'done', result);
+ }
+
+const handlePublic = when(
+    propEq('isPublic', true),
+    dissoc('private')
+);
+const assignDone = assoc('result', 'done');
+const branch = compose(
+    assignDone,
+    handlePublic
+);
+
+/**Unless */
+const _isDefaultArray = (x) => {
+    const result = !isArray(x) ?
+        [] :
+        x;
+
+    return result.map(wrap => ({wrap}))
+}
+
+const isDefaultArray = compose(
+    map(objOf('wrap')),
+    unless(
+        isArray,
+        constant([])
+    )
+)
+
+
 log(
-    declarative(1)
+    isDefaultArray([10,11,12,13])
 )

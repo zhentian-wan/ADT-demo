@@ -1,6 +1,6 @@
 const log = require('./log')
-const {and, assoc, constant, compose, unless, flip, map,  objOf, when, hasProp, dissoc,identity, not, ifElse, isArray, isObject, or, propEq} = require('crocks');
-const {add, lt, propOr} = require('ramda');
+const {and, assoc, constant, compose, unless, flip, map,  objOf, when, hasProp, dissoc,identity, not, ifElse, isArray, isObject, isString, or, propEq} = require('crocks');
+const {T, F, add, lt, propOr, length} = require('ramda');
 
 // _isLess :: Number -> Boolean
 const _isLess = x => x < 10
@@ -83,22 +83,48 @@ const branch = compose(
 
 /**Unless */
 const _isDefaultArray = (x) => {
-    const result = !isArray(x) ?
-        [] :
+    const result = !isArray(x) || !length(x) ?
+        [x] :
         x;
 
     return result.map(wrap => ({wrap}))
 }
 
+const arrayOf = x => [x];
+
 const isDefaultArray = compose(
     map(objOf('wrap')),
     unless(
-        isArray,
-        constant([])
+        and(isArray, length),
+        arrayOf
     )
+    /*when(
+        not(and(isArray, length)), //or(not(isArray), not(length)),
+        arrayOf
+    )*/
+)
+// (!q && !p) === !(p || q)
+// (!q || !p) === !(p && q)
+// p  q   pred
+// T  T   F
+// T  F   T
+// F  T   T
+// F  F   T
+
+const pred = (p, q) =>
+    or(not(p), not(q))
+
+const emptyString = constant('');
+const defaultToString = when(
+    and(not(isArray), not(isString)), // not(or(isArray, isString))
+    emptyString
 )
 
+const calcLen = compose(
+    length,
+    defaultToString
+)
 
 log(
-    isDefaultArray([10,11,12,13])
+    calcLen({name: 'av'})
 )

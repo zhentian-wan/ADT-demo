@@ -1,6 +1,26 @@
 const log = require("./log");
-const { compose, constant, ifElse, isArray } = require("crocks");
-const { length } = require("ramda");
+const {
+  assign,
+  compose,
+  constant,
+
+  ifElse,
+  isArray,
+  isNil,
+  flip,
+  when,
+  not,
+  map,
+  defaultProps
+} = require("crocks");
+const {
+  assoc,
+
+  gt,
+  length,
+  propSatisfies,
+  toPairs
+} = require("ramda");
 
 // week logic
 // p q  p => q
@@ -33,4 +53,19 @@ const hasLength = compose(
 // whenArrayHasLength :: a -> Boolean
 const whenArrayHasLength = implies(isArray, hasLength);
 
-log(whenArrayHasLength([1, 2]));
+// isLarge :: a -> Boolean
+const isLarge = propSatisfies(flip(gt, 3), "length");
+
+const defaultConfig = defaultProps({
+  time: 1,
+  min: 1,
+  max: 2
+});
+
+const response = {
+  time: null,
+  min: 2,
+  max: 3
+};
+
+log(defaultConfig(response));

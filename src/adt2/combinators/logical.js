@@ -1,9 +1,11 @@
 const log = require("./log");
 const {
+  and,
+  or,
   assign,
   compose,
   constant,
-
+  isString,
   ifElse,
   isArray,
   isNil,
@@ -13,14 +15,7 @@ const {
   map,
   defaultProps
 } = require("crocks");
-const {
-  assoc,
-
-  gt,
-  length,
-  propSatisfies,
-  toPairs
-} = require("ramda");
+const { assoc, allPass, gt, length, propSatisfies, toPairs } = require("ramda");
 
 // week logic
 // p q  p => q
@@ -49,23 +44,22 @@ const hasLength = compose(
   Boolean,
   length
 );
-
-// whenArrayHasLength :: a -> Boolean
-const whenArrayHasLength = implies(isArray, hasLength);
-
 // isLarge :: a -> Boolean
 const isLarge = propSatisfies(flip(gt, 3), "length");
+const arrayWithLength = implies(isArray, hasLength);
+const isLargeString = implies(isString, isLarge);
 
-const defaultConfig = defaultProps({
-  time: 1,
-  min: 1,
-  max: 2
-});
+/**
+ * isValidStringOrArray is week can check array has length
+ * or string is large, only for those two types
+ * other types, such as number, objet, it return false
+ */
+const isValidStringOrArray = allPass([
+  or(isString, isArray),
+  arrayWithLength,
+  isLargeString
+]);
 
-const response = {
-  time: null,
-  min: 2,
-  max: 3
-};
-
-log(defaultConfig(response));
+log(isLargeString(undefined)); // true
+log(arrayWithLength(undefined)); // true
+log(isValidStringOrArray(undefined)); // false

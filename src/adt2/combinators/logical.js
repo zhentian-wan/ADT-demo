@@ -1,21 +1,15 @@
 const log = require("./log");
 const {
-  and,
   or,
-  assign,
   compose,
   constant,
   isString,
   ifElse,
   isArray,
-  isNil,
   flip,
-  when,
-  not,
-  map,
   defaultProps
 } = require("crocks");
-const { assoc, allPass, gt, length, propSatisfies, toPairs } = require("ramda");
+const { allPass, gt, length, propSatisfies } = require("ramda");
 
 // week logic
 // p q  p => q
@@ -63,3 +57,7 @@ const isValidStringOrArray = allPass([
 log(isLargeString(undefined)); // true
 log(arrayWithLength(undefined)); // true
 log(isValidStringOrArray(undefined)); // false
+log(isValidStringOrArray({})); // false
+log(isValidStringOrArray([1, 2])); // true
+log(isValidStringOrArray("fwe")); // false
+log(isValidStringOrArray("fwef")); // true

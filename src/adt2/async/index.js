@@ -15,10 +15,10 @@ const e = e => console.error("rej", e);
 const s = s => console.log("res", s);
 
 const m = Async((rej, res) => {
-  setTimeout(() => rej(23), 1000);
+  setTimeout(() => res(23), 1000);
 })
   .bimap(constant("error happen"), identity) // if resolve call identity (on the right), if not call constant on the left
-  //.swap(constant(1), identity) // if resolve call idenetity, then turn resolve to reject; vise visa
+  //.swap(constant(1), identity) // if resolve call idenetity, then turn resolve to reject; vise versa
   //.coalesce(constant(1), identity) // is resolve call identity, if reject, call constant() and turn it to resolve
   .map(x => x * 2);
 

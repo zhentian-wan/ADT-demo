@@ -24,4 +24,4 @@ const flow = pipeK(
   output
 );
 
-fork(flow("test").runWith(env));
+fork(flow("prod").runWith(env));

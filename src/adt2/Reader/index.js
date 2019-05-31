@@ -1,17 +1,49 @@
 const { readJSON, writeJSON, fork } = require("./helper");
-const { Async, Reader, constant, pipeK, prop, liftA2 } = require("crocks");
-const log = require("./log");
-const { ask } = Reader;
+const { Async, Reader, ReaderT, pipeK, assign, constant } = require("crocks");
 
-const data = {
-  happy: true,
-  sad: false
+const input = defValAsync =>
+  Reader(({ input }) =>
+    readJSON(input).chain(val => defValAsync.map(assign(val)))
+  );
+const output = asyncInput =>
+  Reader(({ output }) => asyncInput.chain(writeJSON(output)));
+const env = {
+  input: "data.json",
+  output: "output.json"
 };
-const pairUp = liftA2(x => y => [x, y]);
-// a -> m b
-const happy = ask(prop("happy"));
-const sad = ask(prop("sad"));
+const flow = data =>
+  Reader.of(Async.of(data))
+    .chain(input)
+    .chain(output);
 
-const m = happy.chain(h => sad.map(pairUp(h)));
+fork(flow({ age: 23 }).runWith(env));
+/**
+{
+  "age": 23,
+  "name": "Zhentian",
+  "port": 8080
+}
+/*
+const ReaderAsync = ReaderT(Async);
 
-log(m.runWith(data));
+const input = data =>
+  ReaderAsync(({ input }) => readJSON(input).map(assign(data)));
+const output = data => ReaderAsync(({ output }) => writeJSON(output, data));
+
+const env = {
+  input: "data.json",
+  output: "output.json"
+};
+
+const flow = pipeK(
+  ReaderAsync.of,
+  input,
+  output
+);
+
+fork(
+  flow({
+    age: 30
+  }).runWith(env)
+);
+*/

@@ -1,0 +1,8 @@
+{
+  "name": "App",
+  "config": {
+    "prod": "config.prod.json",
+    "dev": "config.dev.json",
+    "test": "config.test.json"
+  }
+}

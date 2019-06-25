@@ -35,7 +35,9 @@ const parse = tryCatch(JSON.parse);
 const readFileAsync = Async.fromNode(readFile);
 const writeFileAsync = Async.fromNode(writeFile);
 const mm = readFileAsync("data.json", "utf8")
-  .chain(resultToAsync(parse))
+  .map(parse)
+  .map(x => x())
+  .chain(resultToAsync)
   .chain(x =>
     writeFileAsync("output.json", JSON.stringify(x, null, 2)).map(constant(x))
   )

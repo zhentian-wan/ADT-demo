@@ -1,12 +1,11 @@
-const { readJSON, writeJSON, fork } = require("./helper");
-const { Async, Reader, constant, pipeK } = require("crocks");
+const { readFile } = require("fs");
+const { Async, tryCatch, resultToAsync } = require("crocks");
 
-// a -> m b, using K
-// readJSON("data.json").chain(writeJSON("output-b.json"))
-const flow = pipeK(
-  constant(Async.of("data.json")),
-  readJSON,
-  writeJSON("output-b.json")
-);
+const e = e => console.error("rej", e);
+const s = s => console.log("res", s);
 
-fork(flow);
+const parse = tryCatch(JSON.parse);
+const readFileAsync = Async.fromNode(readFile);
+readFileAsync("output.json", "utf8")
+  .chain(resultToAsync(parse))
+  .fork(e, s);

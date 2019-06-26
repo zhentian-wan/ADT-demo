@@ -1,4 +1,4 @@
-const { State, compose, curry, mapProps } = require("crocks");
+const { State, assign, compose, curry, mapProps, when } = require("crocks");
 
 const { modify } = State;
 
@@ -19,6 +19,9 @@ const clampAfter = curry((min, max, fn) =>
   )
 );
 
+// assignWhen :: ((a -> Boolean), Object) -> Object -> Object
+const assignWhen = (pred, obj) => when(pred, assign(obj));
+
 // over :: (String, (a -> b)) -> Object -> State Object ()
 const over = (key, fn) => modify(mapProps({ [key]: fn }));
 
@@ -27,5 +30,6 @@ module.exports = {
   clampAfter,
   dec,
   over,
-  inc
+  inc,
+  assignWhen
 };

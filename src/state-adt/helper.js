@@ -1,6 +1,14 @@
-const { State, assign, compose, curry, mapProps, when } = require("crocks");
+const {
+  State,
+  assign,
+  compose,
+  curry,
+  mapProps,
+  when,
+  prop
+} = require("crocks");
 
-const { modify } = State;
+const { get, modify } = State;
 
 // inc :: Number -> Number
 const inc = x => x + 1;
@@ -25,10 +33,14 @@ const assignWhen = (pred, obj) => when(pred, assign(obj));
 // over :: (String, (a -> b)) -> Object -> State Object ()
 const over = (key, fn) => modify(mapProps({ [key]: fn }));
 
+// getState: String -> Object -> State Object (Maybe a)
+const getState = key => get(prop(key));
+
 module.exports = {
   clamp,
   clampAfter,
   dec,
+  getState,
   over,
   inc,
   assignWhen

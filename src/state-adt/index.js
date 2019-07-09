@@ -1,6 +1,5 @@
 const log = require("./lib/log");
-const { State } = require("crocks");
-const { getHint, getCard } = require("./data/model/feedback");
+const feedback = require("./data/model/feedback");
 
 const state = {
   cards: [
@@ -12,8 +11,9 @@ const state = {
     color: "green",
     shape: "square"
   },
+  isCorrect: null,
   left: 8,
   moves: 0
 };
 
-log(getCard("green-squares").evalWith(state));
+log(feedback("green-square").execWith(state));

@@ -33,14 +33,22 @@ const assignWhen = (pred, obj) => when(pred, assign(obj));
 // over :: (String, (a -> b)) -> Object -> State Object ()
 const over = (key, fn) => modify(mapProps({ [key]: fn }));
 
-// getState: String -> Object -> State Object (Maybe a)
+// getState :: String -> State Object (Maybe a)
 const getState = key => get(prop(key));
+
+// liftState :: (a -> b) -> a -> State s b
+const liftState = fn =>
+  compose(
+    State.of,
+    fn
+  );
 
 module.exports = {
   clamp,
   clampAfter,
   dec,
   getState,
+  liftState,
   over,
   inc,
   assignWhen

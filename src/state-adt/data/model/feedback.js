@@ -1,5 +1,6 @@
 const {
   State,
+  compose,
   composeK,
   constant,
   converge,
@@ -12,7 +13,13 @@ const {
   map,
   omit
 } = require("crocks");
-const { getState, over, liftState } = require("../../helper");
+const {
+  getState,
+  over,
+  liftState,
+  clampAfter,
+  decOrInc
+} = require("../../helper");
 
 const { get } = State;
 
@@ -38,11 +45,25 @@ const cardToHint = composeK(
   getCard
 );
 
+const limitRank = clampAfter(0, 4);
+
+// adjustRank :: Boolean -> Number -> Number
+const adjustRank = compose(
+  limitRank,
+  decOrInc
+);
+
+// updateRank :: Boolean -> State AppState ()
+const udpateRank = isCorrect => over("rank", adjustRank(isCorrect));
+
+// applyFeedback :: Boolean -> State AppState ()
+const applyFeedback = converge(liftA2(constant), udpateRank, setIsCorrect);
+
 // validateAnswer :: String -> State AppState Boolean
 const validateAnswer = converge(liftA2(equals), cardToHint, getHint);
 
 const feedback = composeK(
-  setIsCorrect,
+  applyFeedback,
   validateAnswer
 );
 

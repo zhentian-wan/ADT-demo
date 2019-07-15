@@ -12,8 +12,10 @@ const state = {
     shape: "square"
   },
   isCorrect: null,
+  rank: 4,
   left: 8,
-  moves: 0
+  moves: 0,
+  seed: 23
 };
 
 log(feedback("green-square").execWith(state));

@@ -16,6 +16,9 @@ const inc = x => x + 1;
 // dec :: Number -> Number
 const dec = x => x - 1;
 
+// decOrInc :: Boolean -> Number -> Number
+const decOrInc = x => (x ? dec : inc);
+
 // clamp :: (Number, Number) -> Number -> Number
 const clamp = (min, max) => x => Math.min(Math.max(min, x), max);
 
@@ -47,6 +50,7 @@ module.exports = {
   clamp,
   clampAfter,
   dec,
+  decOrInc,
   getState,
   liftState,
   over,

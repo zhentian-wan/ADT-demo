@@ -5,7 +5,8 @@ const {
   curry,
   mapProps,
   when,
-  prop
+  prop,
+  map
 } = require("crocks");
 
 const { get, modify } = State;
@@ -39,12 +40,24 @@ const over = (key, fn) => modify(mapProps({ [key]: fn }));
 // getState :: String -> State Object (Maybe a)
 const getState = key => get(prop(key));
 
+// selectState :: (String, (a -> b)) -> State Object (Maybe b)
+const selectState = (key, fn) =>
+  get(
+    compose(
+      map(fn),
+      prop(key)
+    )
+  );
+
 // liftState :: (a -> b) -> a -> State s b
 const liftState = fn =>
   compose(
     State.of,
     fn
   );
+
+// getAt :: Number -> [a] -> a
+const getAt = index => arr => arr[index];
 
 module.exports = {
   clamp,
@@ -55,5 +68,7 @@ module.exports = {
   liftState,
   over,
   inc,
-  assignWhen
+  assignWhen,
+  selectState,
+  getAt
 };

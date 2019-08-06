@@ -1,16 +1,16 @@
 const log = require("./lib/log");
-const feedback = require("./data/model/feedback");
-
+const { nextHint } = require("./data/model/turn");
+const { generateCards } = require("./data/model/game");
 const state = {
   cards: [
     { id: "green-square", color: "green", shape: "square" },
     { id: "orange-square", color: "orange", shape: "square" },
-    { id: "blue-triangle", color: "blue", shape: "triangle" }
+    { id: "blue-triangle", color: "blue", shape: "triangle", selected: true }
   ],
-  hint: {
-    color: "green",
-    shape: "square"
-  },
+  colors: ["orange", "green", "blue", "yellow"],
+  shapes: ["square", "triangle", "circle"],
+  hint: null,
+  seed: Date.now(),
   isCorrect: null,
   rank: 4,
   left: 8,
@@ -18,4 +18,4 @@ const state = {
   seed: 23
 };
 
-log(feedback("green-square").execWith(state));
+log(generateCards().evalWith(state));

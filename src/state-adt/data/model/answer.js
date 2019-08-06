@@ -1,5 +1,6 @@
 const { clampAfter, dec, inc, over, assignWhen } = require("../../helper");
 const { State, composeK, map, propEq } = require("crocks");
+
 // limitMoves :: (a -> Number) -> a -> Number
 const limitMoves = clampAfter(0, 8);
 

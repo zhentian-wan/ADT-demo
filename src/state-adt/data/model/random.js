@@ -7,7 +7,7 @@ const {
   liftA2
 } = require("crocks");
 
-const { liftState, over } = require("../helpers");
+const { liftState, over } = require("../../helper");
 
 const { get, modify } = State;
 
@@ -28,6 +28,7 @@ const updateSeed = seed => modify(assoc("seed", seed));
 
 // nextValue :: Integer -> State AppState Number
 const nextValue = converge(liftA2(constant), liftState(value), updateSeed);
+
 // random :: () -> State AppState Number
 const random = composeK(
   nextValue,
@@ -36,3 +37,10 @@ const random = composeK(
 
 // between :: (Integer, Integer) -> State AppState Integer
 const between = (min, max) => random().map(normalize(min, max));
+
+// randomIndex :: [a] -> State AppState a
+const randomIndex = arr => between(0, arr.length);
+
+module.exports = {
+  randomIndex
+};

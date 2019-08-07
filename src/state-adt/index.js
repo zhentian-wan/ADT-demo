@@ -1,6 +1,7 @@
 const log = require("./lib/log");
+const { chain } = require("crocks");
 const { nextHint } = require("./data/model/turn");
-const { generateCards } = require("./data/model/game");
+const { drawCardAt, generateCards } = require("./data/model/game");
 const state = {
   cards: [
     { id: "green-square", color: "green", shape: "square" },
@@ -18,4 +19,11 @@ const state = {
   seed: 23
 };
 
-log(generateCards().evalWith(state));
+log(
+  generateCards()
+    .map(drawCardAt(0))
+    .map(chain(drawCardAt(7)))
+    .map(chain(drawCardAt(2)))
+    .evalWith(state)
+    .fst().length
+);

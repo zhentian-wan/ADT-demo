@@ -59,6 +59,12 @@ const liftState = fn =>
 // getAt :: Number -> [a] -> a
 const getAt = index => arr => arr[index];
 
+// unsetAt :: Number -> [a] -> [a]
+const unsetAt = index => arr => [
+  ...arr.slice(0, index),
+  ...arr.slice(index + 1)
+];
+
 module.exports = {
   clamp,
   clampAfter,
@@ -70,5 +76,6 @@ module.exports = {
   inc,
   assignWhen,
   selectState,
-  getAt
+  getAt,
+  unsetAt
 };

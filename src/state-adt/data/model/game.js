@@ -1,7 +1,10 @@
 // liftA2 :: Applicative m => (a -> b -> c) -> m a -> m b -> m c
 // converge :: (b -> c -> d) -> (a -> b) -> (a -> c) -> a -> d
 const {
+  Pair,
+  chain,
   bimap,
+  snd,
   compose,
   identity,
   option,
@@ -10,7 +13,8 @@ const {
   liftA2,
   converge
 } = require("crocks");
-const { getState, getAt, unsetAt } = require("../../helper");
+const { getState, getAt, unsetAt, liftState } = require("../../helper");
+const { randomIndex } = require("./random");
 
 // getColors :: () -> State AppState [String]
 const getColors = () => getState("colors").map(option([]));
@@ -40,7 +44,18 @@ const drawCardAt = index =>
     fanout(getAt(index), unsetAt(index))
   );
 
+// Deck :: Pair [Card] [Card]
+
+// getDeck :: () -> State AppState Deck
+const getDeck = () => generateCards().map(xs => Pair([], xs));
+
+// draw :: Integer -> Deck ->Deck
+const draw = index => deck => deck.chain(drawCardAt(index));
+//deck.chain(drawCardAt(index));
+
+// drawRandom :: Deck -> State AppState Deck
+
 module.exports = {
-  generateCards,
-  drawCardAt
+  getDeck,
+  draw
 };

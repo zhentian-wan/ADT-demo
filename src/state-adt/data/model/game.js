@@ -50,12 +50,22 @@ const drawCardAt = index =>
 const getDeck = () => generateCards().map(xs => Pair([], xs));
 
 // draw :: Integer -> Deck ->Deck
-const draw = index => deck => deck.chain(drawCardAt(index));
-//deck.chain(drawCardAt(index));
+const draw = compose(
+  chain,
+  drawCardAt
+);
 
 // drawRandom :: Deck -> State AppState Deck
+const drawRandom = converge(
+  liftA2(draw),
+  compose(
+    randomIndex,
+    snd
+  ),
+  liftState(identity)
+);
 
 module.exports = {
   getDeck,
-  draw
+  drawRandom
 };

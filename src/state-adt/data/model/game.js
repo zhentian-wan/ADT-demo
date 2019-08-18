@@ -4,6 +4,8 @@ const {
   Pair,
   chain,
   bimap,
+  constant,
+  composeK,
   snd,
   compose,
   identity,
@@ -11,9 +13,18 @@ const {
   fanout,
   curry,
   liftA2,
-  converge
+  converge,
+  mreduce,
+  Endo
 } = require("crocks");
-const { getState, getAt, unsetAt, liftState } = require("../../helper");
+const {
+  getState,
+  getAt,
+  unsetAt,
+  liftState,
+  repeat,
+  over
+} = require("../../helper");
 const { randomIndex } = require("./random");
 
 // getColors :: () -> State AppState [String]
@@ -65,7 +76,26 @@ const drawRandom = converge(
   liftState(identity)
 );
 
+// drawNine :: State AppState Deck -> State AppState Deck
+// repeat(9, chain(drawRandom)) --> return 9 functions in array
+// mreduce(Endo) --> combine into one function
+const drawNine = mreduce(Endo, repeat(9, chain(drawRandom)));
+
+// drawFromDeck :: () -> State AppState Deck
+const drawFromDeck = compose(
+  drawNine,
+  getDeck
+);
+
+// setCards :: Deck -> State AppState ()
+const setCards = deck => over("cards", constant(deck.fst()));
+
+// pickCards :: () -> State AppState ()
+const pickCards = composeK(
+  setCards,
+  drawFromDeck
+);
+
 module.exports = {
-  getDeck,
-  drawRandom
+  pickCards
 };

@@ -65,6 +65,10 @@ const unsetAt = index => arr => [
   ...arr.slice(index + 1)
 ];
 
+// repeat :: (Integer, a) -> [ a ]
+const repeat = (num, elem) =>
+  num === 1 ? [elem] : repeat(num - 1, elem).concat([elem]);
+
 module.exports = {
   clamp,
   clampAfter,
@@ -77,5 +81,6 @@ module.exports = {
   assignWhen,
   selectState,
   getAt,
-  unsetAt
+  unsetAt,
+  repeat
 };
